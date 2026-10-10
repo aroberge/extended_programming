@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+# generated pages and maps
+*.epy
+epy.html
+epy.json
