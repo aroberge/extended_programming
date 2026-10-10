@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 epy — extended python graph.
 
@@ -39,12 +38,11 @@ DEFS = ("def", "method", "class")
 MAX_DEPTH = 6
 
 
-# ── nodes ────────────────────────────────────────────────────────────────────
 
 @dataclass(eq=False)
 class Node:
     id: str
-    kind: str        # module | class | def | method | imports | globals | attrs | main | script | doc
+    kind: str
     name: str
     qual: str
     file: str
@@ -189,7 +187,6 @@ def block_preview(kind: str, stmts) -> str:
     return s if len(s) <= 70 else s[:69] + "…"
 
 
-# ── per-file scaffold ───────────────────────────────────────────────────────
 
 class FileGraph:
     def __init__(self, rel: str, src: str):
@@ -312,7 +309,6 @@ class FileGraph:
         return n
 
 
-# ── project graph ───────────────────────────────────────────────────────────
 
 def iter_py(root: Path, excludes: list[str]):
     if root.is_file():
@@ -347,7 +343,6 @@ class Project:
         self.rdeps: dict[str, list[str]] = {rel: [] for rel in self.files}
         self._link()
 
-    # module + name resolution
 
     def resolve_module(self, mod: str, from_rel: str, level: int) -> str | None:
         if level:
@@ -495,7 +490,6 @@ class Project:
             for d in self.deps[rel]:
                 self.rdeps[d].append(rel)
 
-    # lookups for `show`
 
     def find(self, target: str) -> list[Node]:
         def match_files(f):
@@ -558,7 +552,6 @@ class Project:
         return data
 
 
-# ── text map (.epy) ─────────────────────────────────────────────────────────
 
 def short_sig(n: Node, width: int = 46) -> str:
     sig = n.sig
@@ -657,7 +650,6 @@ def render_show(proj: Project, n: Node) -> str:
     return "\n".join(head + body)
 
 
-# ── html flowchart ──────────────────────────────────────────────────────────
 
 def render_html(proj: Project, with_source: bool = True, start: str | None = None) -> str:
     data = proj.to_dict(with_source)
@@ -1477,7 +1469,6 @@ render();
 """
 
 
-# ── cli ─────────────────────────────────────────────────────────────────────
 
 def main(argv=None):
     ap = argparse.ArgumentParser(prog="epy", description="extended python graph — block map of a Python codebase")
