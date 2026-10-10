@@ -1,21 +1,3 @@
-"""
-epy — extended python graph.
-
-Scaffolds a Python codebase into a block map. Every file is cut into
-line-ranged boxes (imports, globals, class -> methods, functions, main guard,
-loose script), and every box is wired to the boxes it calls. An LLM (or you)
-reads the cheap map first, then pulls only the line ranges it actually needs.
-
-  epy.py map  PATH [-o out.epy] [--depth N] [--no-calls] [--external]
-  epy.py show PATH TARGET     TARGET: file.py::Class.method | Class.method | file.py:120 | file.py
-  epy.py html PATH [-o epy.html] [--no-source]
-  epy.py json PATH [-o epy.json]
-
-Stdlib only. Call resolution is static and best-effort: lexical scopes,
-self/cls members (including project base classes), imports across project
-files, and `x = SomeClass(...)` style local typing. Anything it can't pin to a
-project box is listed as external.
-"""
 from __future__ import annotations
 
 import argparse
@@ -36,7 +18,6 @@ SKIP_DIRS = {"venv", ".venv", "env", "__pycache__", "node_modules", "site-packag
 FUNC = ("def", "method")
 DEFS = ("def", "method", "class")
 MAX_DEPTH = 6
-
 
 
 @dataclass(eq=False)
@@ -129,7 +110,6 @@ def category(st, in_class: bool) -> str:
 
 
 def direct_defs(body):
-    """defs/classes in a body, descending into if/for/with/try but not into other defs."""
     for st in body:
         if isinstance(st, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
             yield st
@@ -141,7 +121,6 @@ def direct_defs(body):
 
 
 def scan_scope(stmts):
-    """Call sites, name references passed as arguments, and `x = Foo(...)` typings."""
     calls, refs, types = [], [], {}
     stack = list(stmts)
     while stack:
@@ -187,7 +166,6 @@ def block_preview(kind: str, stmts) -> str:
     return s if len(s) <= 70 else s[:69] + "…"
 
 
-
 class FileGraph:
     def __init__(self, rel: str, src: str):
         self.rel = rel
@@ -227,7 +205,6 @@ class FileGraph:
                         self.imports[a.asname or a.name] = (mod, a.name, n.level)
 
     def _lead(self, start: int, prev_end: int) -> int:
-        """Pull contiguous comment lines directly above a block into it."""
         while start - 1 > prev_end and self.lines[start - 2].lstrip().startswith("#"):
             start -= 1
         return start
@@ -307,7 +284,6 @@ class FileGraph:
         n.doc = first_line(ast.get_docstring(st))
         n.decorators = [unparse(d) for d in st.decorator_list]
         return n
-
 
 
 def iter_py(root: Path, excludes: list[str]):
@@ -552,7 +528,6 @@ class Project:
         return data
 
 
-
 def short_sig(n: Node, width: int = 46) -> str:
     sig = n.sig
     if n.kind == "method":
@@ -648,7 +623,6 @@ def render_show(proj: Project, n: Node) -> str:
     w = len(str(n.end))
     body = [f"{i:>{w}} | {fg.lines[i - 1]}" for i in range(n.start, min(n.end, len(fg.lines)) + 1)]
     return "\n".join(head + body)
-
 
 
 def render_html(proj: Project, with_source: bool = True, start: str | None = None) -> str:
@@ -1467,7 +1441,6 @@ window.addEventListener('resize', () => { if (!document.body.classList.contains(
 render();
 </script></body></html>
 """
-
 
 
 def main(argv=None):
