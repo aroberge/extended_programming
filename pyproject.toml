@@ -1,0 +1,43 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "epy"
+dynamic = ["version"]
+description = 'Easy visual navigation for Python projects.'
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+keywords = []
+authors = [
+  { name = "André Roberge", email = "andre.roberge@gmail.com" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3.15",
+  "Programming Language :: Python :: Implementation :: CPython",
+]
+
+[project.urls]
+Issues = "https://github.com/aroberge/extended_programming/issues"
+Source = "https://github.com/aroberge/extended_programming"
+
+[tool.hatch.version]
+path = "src/epy/__about__.py"
+
+[tool.mypy]
+mypy_path = "src/epy/"
+
+[tool.pyrefly]
+search-path = ["src/epy/"]
+preset = "legacy"
+project-excludes = [".venv", "build/"]

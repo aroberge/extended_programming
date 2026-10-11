@@ -1,5 +1,14 @@
 # epy: Extended Python
 
+This project was cloned from https://github.com/phoenix2610/Extended_Programming.
+
+Originally, everything was in a single file. I am restructuring it with the help of the program itself which is extremely helpful in viewing the structure and figuring out how best to
+separate it into multiples files.
+
+The original readme is below.
+
+## Original readme
+
 **Open a Python file and see it as a mind map, where every branch holds the actual code.**
 
 epy cuts each file into its blocks (imports, globals, classes and their methods, functions, the `__main__` guard) and lays them out around the file like a Coggle mind map. Every card shows that block's real source with its line range, and every block is linked to what it calls and what calls it, including across files.
